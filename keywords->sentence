@@ -1,0 +1,55 @@
+import txt
+import docx
+import pdfplumber
+import os
+
+docu=docx.Document()
+keyword=input('please enter the keyword: ')
+path=input('please enter the file location: ')
+
+def path_list():
+    sumi=[]
+    path_list=os.listdir(path)
+    for i in path_list:
+        if i.count('.txt')>0:
+            sumi.append(i)
+    return sumi
+
+
+def want(txtname,keyword):
+    file=open(txtname,'r',encoding='UTF-8')
+    f=file.read()
+    sentence_list=f.split('. ')
+    sumi=[]
+    i=0
+    a=1
+    while i <len(sentence_list):
+        j=sentence_list[i]
+        j.replace('\n','')
+        j.replace('  ','')
+        j.strip('   ')
+        i+=1
+        if j.count(keyword)>0: 
+            sumi.append(f'【{a}】: {j}.')
+            a+=1
+    result=str('')
+    for t in sumi:
+        result+=t
+    print('working')
+    return result
+
+def txts(keyword):
+    a=path_list()
+    b=len(a)
+    i=0
+    while i<b:
+        test=want(a[i],keyword)
+        docu.add_paragraph(test)
+        i+=1
+        print('done')
+
+txts(keyword)
+
+
+
+docu.save('test.docx')
